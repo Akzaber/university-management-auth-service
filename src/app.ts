@@ -1,6 +1,7 @@
-import express, { Application, NextFunction, Request, Response } from 'express'
+import express, { Application } from 'express'
 import cors from 'cors'
-import router from './app/modules/users/users.route'
+import { UserRoutes } from './app/modules/user/user.route'
+import globalErrorHandler from './app/middlewares/globalErrorHandler'
 const app: Application = express()
 
 // cors
@@ -11,12 +12,14 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // application routes
-app.use('/api/v1/users/', router)
+app.use('/api/v1/users/', UserRoutes)
 
-// Testing purpose
-app.get('/', (req: Request, res: Response, next: NextFunction) => {
-  res.send('Working successfully')
-  next()
-})
+// // Testing purpose
+// app.get('/', async (req: Request, res: Response, next: NextFunction) => {
+//   throw new Error('Testing error is now working');
+//   // next('Ore baba Error khaisire');
+// });
 
+// Global Error Handler
+app.use(globalErrorHandler)
 export default app
